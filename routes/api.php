@@ -19,5 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login', [AuthenticationController::class, 'login'])->name('post.login');
 Route::post('/register', [AuthenticationController::class, 'register'])->name('post.register');
+
+Route::group(['middleware' => 'private'], function () {
+
+    Route::post('/login', [AuthenticationController::class, 'login'])->name('post.login');
+});

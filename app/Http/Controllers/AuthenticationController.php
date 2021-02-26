@@ -60,6 +60,22 @@ class AuthenticationController extends Controller
             ], 401);
         }
     }
+
+    /**
+     * @param RegisterRequest $request
+     */
+    public function profile(RegisterRequest $request)
+    {
+        try {
+            $user = User::create($request->all());
+            return response([ 'user' => $user, 'message' => 'Usuário cadastrado com sucesso'], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e
+            ], 401);
+        }
+    }
+
     /**
      * Convert date in JWT
      *
