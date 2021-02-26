@@ -15,7 +15,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'login' => 'required|min:5|max:50',
+            'email' => 'required|min:5|max:50',
             'password' => 'required|min:4|max:50'
         ];
     }
@@ -23,10 +23,10 @@ class LoginRequest extends FormRequest
     public function messages()
     {
         return [
-            'login.required' => 'O email é obrigatório',
+            'email.required' => 'O email é obrigatório',
             'password.required' => 'A senha é obrigatório',
-            'login.min' => 'O campo de login deve ter mais de 5 caracteres',
-            'login.max' => 'O campo de login deve ter menos de 50 caracteres',
+            'email.min' => 'O campo de login deve ter mais de 5 caracteres',
+            'email.max' => 'O campo de login deve ter menos de 50 caracteres',
         ];
     }
 }

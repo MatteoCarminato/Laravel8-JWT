@@ -40,6 +40,7 @@ class JwtMiddleware
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
+        $request->data = $credentials->data;
 
         return $next($request);
     }

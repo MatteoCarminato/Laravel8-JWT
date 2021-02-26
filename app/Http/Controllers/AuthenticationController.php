@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Resources\AuthenticationCollection;
 use App\Models\User;
+use Exception;
 use Firebase\JWT\JWT;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -39,37 +41,7 @@ class AuthenticationController extends Controller
                 'error' => 'Usuario não encontrado'
             ], 401);
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e
-            ], 401);
-        }
-    }
-
-    /**
-     * @param RegisterRequest $request
-     */
-    public function register(RegisterRequest $request)
-    {
-        try {
-            $user = User::create($request->all());
-            return response([ 'user' => $user, 'message' => 'Usuário cadastrado com sucesso'], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e
-            ], 401);
-        }
-    }
-
-    /**
-     * @param RegisterRequest $request
-     */
-    public function profile(RegisterRequest $request)
-    {
-        try {
-            $user = User::create($request->all());
-            return response([ 'user' => $user, 'message' => 'Usuário cadastrado com sucesso'], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'error' => $e
             ], 401);
@@ -90,5 +62,32 @@ class AuthenticationController extends Controller
             'exp' => time() + (7 * 24 * 60 * 60)// Expiration time
         ];
         return JWT::encode($payload, env('JWT_SECRET'));
+    }
+
+    /**
+     * @param RegisterRequest $request
+     */
+    public function register(RegisterRequest $request)
+    {
+        try {
+            $data = $request->all();
+            $data['password'] = md5($data['password']);
+
+            $user = User::create($data);
+            return response(['user' => $user, 'message' => 'Usuário cadastrado com sucesso'], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e
+            ], 401);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|ResponseFactory|JsonResponse|Response
+     */
+    public function profile(Request $request)
+    {
+        return response()->json(['data' => $request->data], 200);
     }
 }
