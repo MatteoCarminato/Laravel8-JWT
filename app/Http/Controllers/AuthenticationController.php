@@ -53,13 +53,12 @@ class AuthenticationController extends Controller
     {
         try {
             $user = User::create($request->all());
-            return AuthenticationCollection::collection($user);
+            return response([ 'user' => $user, 'message' => 'Usuário cadastrado com sucesso'], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e
             ], 401);
         }
-
     }
     /**
      * Convert date in JWT
