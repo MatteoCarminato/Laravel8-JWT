@@ -30,7 +30,7 @@ class AuthenticationController extends Controller
                     ], 401);
                 } else {
                     return response()->json([
-                        'token' => $this->createJWT($user)
+                        'token' => $this->createToken($user)
                     ], 200);
                 }
             }
@@ -53,8 +53,7 @@ class AuthenticationController extends Controller
     {
         try {
             $user = User::create($request->all());
-            return response()->json($user, 200);
-//            return AuthenticationCollection::collection($user);
+            return AuthenticationCollection::collection($user);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e
@@ -67,7 +66,7 @@ class AuthenticationController extends Controller
      *
      * @return string
      */
-    protected function createJWT($data)
+    protected function createToken($data)
     {
         $payload = [
             'iss' => "lumen-jwt", // Issuer of the token
